@@ -11,9 +11,31 @@
   <script>
     window.$docsify = {
       name: 'OGAS 2.0 中文文档',
-      repo: 'thirstywaterx/docsify-ogas2.0'
+      repo: 'thirstywaterx/docsify-ogas2.0',
+      loadSidebar: true,   // 启用侧边栏
+      subMaxLevel: 3,      // 自动显示目录，最大层级为3
+      auto2top: true,      // 切换页面后自动跳转到页面顶部
+      search: {            // 启用搜索功能
+        placeholder: '搜索',
+        noData: '没有结果!'
+      },
+      pagination: {        // 添加分页插件
+        previousText: '上一章节',
+        nextText: '下一章节',
+      },
+      copyCode: {          // 添加代码复制按钮
+        buttonText: '复制',
+        errorText: '错误',
+        successText: '已复制'
+      }
     }
   </script>
   <script src="https://cdn.jsdelivr.net/npm/docsify/lib/docsify.min.js"></script>
+  <!-- 添加搜索插件 -->
+  <script src="https://cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
+  <!-- 添加复制代码插件 -->
+  <script src="https://cdn.jsdelivr.net/npm/docsify-copy-code/dist/docsify-copy-code.min.js"></script>
+  <!-- 添加分页插件 -->
+  <script src="https://cdn.jsdelivr.net/npm/docsify-pagination/dist/docsify-pagination.min.js"></script>
 </body>
 </html>
