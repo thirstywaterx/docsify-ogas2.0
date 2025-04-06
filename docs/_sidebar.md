@@ -6,6 +6,7 @@
   - [项目维护者](developer.md)
 
 - 文档
+ -新计划经济
 
   - [第一章-序言](/articles/planconomy/part-1.md)
   - [第二章-计划经济的目的](/articles/planconomy/part-2.md)
