@@ -15,8 +15,8 @@
 
 ## 深入了解
 
-[章节 1](/articles/part-1.md)\
-[章节 2](/articles/part-2.md)\
-[章节 3](/articles/part-3.md)\
-[章节 4](/articles/part-4.md)
+[章节 1](/articles/planconomy/part-1.md)\
+[章节 2](/articles/planconomy/part-2.md)\
+[章节 3](/articles/planconomy/part-3.md)\
+[章节 4](/articles/planconomy/part-4.md)
 
