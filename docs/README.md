@@ -1,10 +1,16 @@
-# docsify
+# OGAS 2.0
 
-> A magical documentation site generator.
+> 国家 自动化 系统
 
-## What it is
+## 
 
-Docsify generates your documentation website on the fly. Unlike GitBook, it does not generate static html files. Instead, it smartly loads and parses your Markdown files and displays them as a website. To start using it, all you need to do is create an `index.html` and [deploy it on GitHub Pages](deploy.md).
+“全国自动化信息统计与处理系统”项目（ОГАС，简称奥加斯）是苏联基于控制论原理构建的国家级经济自动化管理系统，设想通过一个计算机网络连接全国各地的数据收集中心。该项目起始于20世纪50年代，最初由阿纳托利·基托夫领导，在1960至1970年代则由科学院院士维克多·格卢什科夫继续推进。
+
+该项目部分得以实践，创建了“计划计算自动化系统”（АСПР），该系统在1970年代末投入使用，原本计划作为ОГАС的一部分。ОГАС的技术方案于1980年代初完成，但未能获得苏联领导层的批准。
+
+自1990年代起，随着国家从计划经济体制转向市场经济体制，ОГАС项目逐渐失去了现实意义。
+
+ [deploy it on GitHub Pages](deploy.md).
 
 See the [Quick start](quickstart.md) guide for more details.
 
