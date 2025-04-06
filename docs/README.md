@@ -10,6 +10,13 @@
 
 自1990年代起，随着国家从计划经济体制转向市场经济体制，ОГАС项目逐渐失去了现实意义。
 
+[俄文官网](https://ogasdemo.ru/)
+
+
 ## 深入了解
 
 [章节 1](/articles/part-1.md)
+[章节 2](/articles/part-2.md)
+[章节 3](/articles/part-3.md)
+[章节 4](/articles/part-4.md)
+
