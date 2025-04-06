@@ -10,31 +10,4 @@
 
 自1990年代起，随着国家从计划经济体制转向市场经济体制，ОГАС项目逐渐失去了现实意义。
 
- [deploy it on GitHub Pages](deploy.md).
-
-See the [Quick start](quickstart.md) guide for more details.
-
-## Features
-
-- No statically built html files
-- Simple and lightweight
-- Smart full-text search plugin
-- Multiple themes
-- Useful plugin API
-- Emoji support
-
-## Examples
-
-Check out the [Showcase](https://github.com/docsifyjs/awesome-docsify#showcase) to see docsify in use.
-
-## Donate
-
-Please consider donating if you think docsify is helpful to you or that my work is valuable. I am happy if you can help me [buy a cup of coffee](https://github.com/QingWei-Li/donate). :heart:
-
-### Gold sponsors
-
-[![](_images/Route4Me.png ':size=200')](https://route4me.com/ 'Best Route Planning and Route Optimization Software')
-
-## Community
-
-Users and the development team are usually in the [Discord server](https://discord.gg/3NwKFyR).
+[深入了解](part-1.md).
