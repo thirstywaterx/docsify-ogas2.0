@@ -12,4 +12,4 @@
 
 # 深入了解
 
-[章节 1](part-1.md).
+[章节 1](/articles/part-1.md)
