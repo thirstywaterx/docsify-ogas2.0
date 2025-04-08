@@ -15,8 +15,5 @@
 
 ## 深入了解
 
-[章节 1](/articles/planconomy/part-1.md)\
-[章节 2](/articles/planconomy/part-2.md)\
-[章节 3](/articles/planconomy/part-3.md)\
-[章节 4](/articles/planconomy/part-4.md)
+[开始阅读](/articles/planconomy/part-1.md)\
 
