@@ -11,3 +11,4 @@
   - [第二章-计划经济的目的](/articles/planconomy/part-2.md)
   - [第三章-经济的目标功能](/articles/planconomy/part-3.md)
   - [第四章-计划与市场的对比](/articles/planconomy/part-4.md)
+  - [第五章-新的计划经济](/articles/planconomy/part-4.md)
