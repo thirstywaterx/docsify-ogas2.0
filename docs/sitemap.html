@@ -2,42 +2,42 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Markdown Sitemap - docsify-ogas2.0</title>
+  <title>Sitemap XML - docsify-ogas2.0</title>
 </head>
 <body>
-  <h1>Markdown Sitemap</h1>
-  <ul id="sitemap"></ul>
+  <h1>Generated Sitemap.xml</h1>
+  <pre id="sitemap" style="white-space: pre-wrap; background: #f9f9f9; padding: 1em; border: 1px solid #ccc;"></pre>
 
   <script>
     const owner = 'thirstywaterx';
     const repo = 'docsify-ogas2.0';
-    const branch = 'develop'; // 确保这是你的默认分支
+    const branch = 'main';
 
     async function getRepoTree() {
       const apiUrl = `https://api.github.com/repos/${owner}/${repo}/git/trees/${branch}?recursive=1`;
       const res = await fetch(apiUrl);
       const data = await res.json();
-
-      // 筛选 .md 文件，排除 README.md 或其他你不想要的文件
       return data.tree.filter(item => item.path.endsWith('.md'));
     }
 
-    function buildList(mdFiles) {
-      const list = document.getElementById('sitemap');
+    function buildSitemap(mdFiles) {
+      const baseUrl = location.origin + location.pathname.replace(/sitemap\.html$/, '');
+      let sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+      sitemapXml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
+
       mdFiles.forEach(file => {
-        const li = document.createElement('li');
-        const a = document.createElement('a');
-
-        // GitHub Pages 路径拼接
-        a.href = `https://thirstywaterx.github.io/docsify-ogas2.0/${file.path}`;
-        a.textContent = file.path;
-
-        li.appendChild(a);
-        list.appendChild(li);
+        const fileUrl = `${baseUrl}${file.path}`;
+        sitemapXml += `  <url>\n    <loc>${fileUrl}</loc>\n  </url>\n`;
       });
+
+      sitemapXml += `</urlset>`;
+      return sitemapXml;
     }
 
-    getRepoTree().then(buildList);
+    getRepoTree().then(mdFiles => {
+      const xml = buildSitemap(mdFiles);
+      document.getElementById('sitemap').textContent = xml;
+    });
   </script>
 </body>
 </html>
