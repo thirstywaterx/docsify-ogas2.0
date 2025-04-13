@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Markdown Sitemap - docsify-ogas2.0</title>
+</head>
+<body>
+  <h1>Markdown Sitemap</h1>
+  <ul id="sitemap"></ul>
+
+  <script>
+    const owner = 'thirstywaterx';
+    const repo = 'docsify-ogas2.0';
+    const branch = 'main'; // 确保这是你的默认分支
+
+    async function getRepoTree() {
+      const apiUrl = `https://api.github.com/repos/${owner}/${repo}/git/trees/${branch}?recursive=1`;
+      const res = await fetch(apiUrl);
+      const data = await res.json();
+
+      // 筛选 .md 文件，排除 README.md 或其他你不想要的文件
+      return data.tree.filter(item => item.path.endsWith('.md'));
+    }
+
+    function buildList(mdFiles) {
+      const list = document.getElementById('sitemap');
+      mdFiles.forEach(file => {
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+
+        // GitHub Pages 路径拼接
+        a.href = `https://thirstywaterx.github.io/docsify-ogas2.0/${file.path}`;
+        a.textContent = file.path;
+
+        li.appendChild(a);
+        list.appendChild(li);
+      });
+    }
+
+    getRepoTree().then(buildList);
+  </script>
+</body>
+</html>
