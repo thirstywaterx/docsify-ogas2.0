@@ -2,36 +2,32 @@ name: Generate Sitemap
 
 on:
   push:
-    paths:
-      - "**.md"
+    branches: [develop] # 你的主分支
   workflow_dispatch:
 
 jobs:
-  generate:
+  generate-sitemap:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - name: Checkout repo
+        uses: actions/checkout@v3
         with:
-          node-version: "20"
+          persist-credentials: false
 
-      - name: Install dependencies
-        run: npm install
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
 
       - name: Generate sitemap.xml
-        env:
-          BASE_URL: https://ogas.waterx.top  # 替换为你自己的地址
-          DOCS_PATH: .
-        run: node .github/scripts/generate-sitemap.js
-
-      - name: Commit and push changes
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add sitemap.xml
-          git diff --cached --quiet || git commit -m "chore: auto-generate sitemap"
-          git push
+          npm install
+          node generate-sitemap.js
+
+      - name: Commit and push sitemap
+        uses: peter-evans/create-pull-request@v5
+        with:
+          commit-message: "chore: update sitemap.xml"
+          title: "Update sitemap"
+          body: "This PR updates sitemap.xml automatically."
+          branch: "auto/sitemap"
