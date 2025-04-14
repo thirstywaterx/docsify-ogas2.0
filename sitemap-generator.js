@@ -1,8 +1,8 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
 const baseUrl = 'https://your-domain.com'; // 改成你的域名
-const docsPath = path.join(__dirname, 'docs');
+const docsPath = path.join(process.cwd(), 'docs');
 
 function getAllMarkdownFiles(dir, prefix = '') {
   const files = fs.readdirSync(dir);
