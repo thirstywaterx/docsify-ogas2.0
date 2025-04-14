@@ -1,35 +1,33 @@
-import fs from 'fs';
-import path from 'path';
+// generate-sitemap.js
+const fs = require('fs');
+const path = require('path');
 
-const baseUrl = 'https://your-domain.com'; // 改成你的域名
-const docsPath = path.join(process.cwd(), 'docs'); // 使用 process.cwd() 替代 __dirname
+const baseUrl = 'https://ogas.waterx.top'; // 替换成你的域名
+const docsDir = path.join(__dirname, 'docs');
+const output = path.join(__dirname, 'sitemap.xml');
 
-function getAllMarkdownFiles(dir, prefix = '') {
+let urls = [];
+
+function walk(dir) {
   const files = fs.readdirSync(dir);
-  let results = [];
-
-  files.forEach(file => {
-    const fullPath = path.join(dir, file);
-    const relPath = path.join(prefix, file);
-    if (fs.statSync(fullPath).isDirectory()) {
-      results = results.concat(getAllMarkdownFiles(fullPath, relPath));
+  for (const file of files) {
+    const full = path.join(dir, file);
+    const rel = path.relative(docsDir, full);
+    if (fs.statSync(full).isDirectory()) {
+      walk(full);
     } else if (file.endsWith('.md')) {
-      results.push(relPath.replace(/\\/g, '/').replace(/\.md$/, ''));
+      const url = baseUrl + '/' + rel.replace(/\\/g, '/').replace(/\.md$/, '').replace(/\/?README$/, '');
+      urls.push(`<url><loc>${url}</loc></url>`);
     }
-  });
-
-  return results;
+  }
 }
 
-const urls = getAllMarkdownFiles(docsPath).map(p => {
-  const url = p === 'index' ? '' : p;
-  return `<url><loc>${baseUrl}/${url}</loc></url>`;
-});
+walk(docsDir);
 
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.join('\n')}
 </urlset>`;
 
-fs.writeFileSync('sitemap.xml', sitemap);
-console.log('sitemap.xml generated.');
+fs.writeFileSync(output, sitemap);
+console.log('Sitemap generated!');
