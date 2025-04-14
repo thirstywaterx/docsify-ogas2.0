@@ -6,7 +6,7 @@ env:
 
 on:
   push:
-    branches: [ ${{ env.DEFAULT_BRANCH }} ]
+    branches: [ develop ]
   schedule:
     - cron: '0 0 * * 1'  # 每周一运行一次
 
