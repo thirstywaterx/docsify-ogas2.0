@@ -2,7 +2,7 @@ name: Generate Sitemap
 
 env:
   DEFAULT_BRANCH: main
-  SITE_URL: https://example.com  # 替换成你自己的域名
+  SITE_URL: https://ogas.waterx.top  # 替换成你自己的域名
 
 on:
   push:
