@@ -7,7 +7,7 @@ on:
     paths:
       - 'docs/**/*.md'
   schedule:
-    - cron: '0 0 * * *' # 每天运行一次作为兜底
+    - cron: '0 0 * * *'
   workflow_dispatch:
 
 jobs:
@@ -34,7 +34,7 @@ jobs:
           git config user.email github-actions@github.com
           if ! git diff --quiet sitemap.xml; then
             git add sitemap.xml
-            git commit -m "chore: auto update sitemap"
+            git commit -m "chore: auto update sitemap [skip ci]"
             git push
           else
             echo "No changes to sitemap.xml"
