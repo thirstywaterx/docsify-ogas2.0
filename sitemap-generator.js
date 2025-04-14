@@ -1,41 +1,35 @@
+// generate-sitemap.js
 const fs = require("fs");
 const path = require("path");
 
-const BASE_URL = process.env.BASE_URL || "https://ogas.waterx.top"; // 你的网站地址
-const DOCS_PATH = process.env.DOCS_PATH || "."; // 根目录，适配 Docsify
+const BASE_URL = "https://ogas.waterx.top"; // 替换成你的域名
+const DOCS_DIR = "docs"; // Docsify 的文档目录
 
-function walk(dir) {
-  let results = [];
-  const list = fs.readdirSync(dir);
-  list.forEach((file) => {
-    const filePath = path.join(dir, file);
-    const stat = fs.statSync(filePath);
-    if (stat && stat.isDirectory()) {
-      results = results.concat(walk(filePath));
-    } else if (file.endsWith(".md")) {
-      results.push(filePath);
+function walk(dir, filelist = []) {
+  const files = fs.readdirSync(dir);
+  files.forEach(file => {
+    const filepath = path.join(dir, file);
+    if (fs.statSync(filepath).isDirectory()) {
+      walk(filepath, filelist);
+    } else if (file.endsWith(".md") && file.toLowerCase() !== "readme.md") {
+      filelist.push(filepath);
     }
   });
-  return results;
+  return filelist;
 }
 
-function mdPathToUrl(p) {
-  let clean = p.replace(DOCS_PATH, "").replace(/\\/g, "/").replace(/\.md$/, "");
-  if (clean.endsWith("/README")) {
-    clean = clean.slice(0, -7);
-  }
-  return `${BASE_URL}${clean}`;
+function buildUrl(filepath) {
+  const relativePath = filepath.replace(`${DOCS_DIR}/`, "").replace(/\.md$/, "");
+  return `${BASE_URL}/#/${relativePath}`;
 }
 
-const files = walk(DOCS_PATH);
-const urls = files.map(mdPathToUrl);
+const pages = walk(DOCS_DIR);
+const urls = pages.map(p => `  <url><loc>${buildUrl(p)}</loc></url>`).join("\n");
 
-const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n` +
-  `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
-  urls
-    .map((url) => `  <url><loc>${url}</loc></url>`)
-    .join("\n") +
-  `\n</urlset>`;
+const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls}
+</urlset>`;
 
-fs.writeFileSync(path.join(DOCS_PATH, "sitemap.xml"), sitemap);
-console.log("✅ Sitemap generated.");
+fs.writeFileSync("sitemap.xml", sitemap);
+console.log("sitemap.xml generated.");
