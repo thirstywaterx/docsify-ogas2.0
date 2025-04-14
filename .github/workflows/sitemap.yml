@@ -1,17 +1,21 @@
 name: Generate Sitemap
 
+env:
+  DEFAULT_BRANCH: main
+  SITE_URL: https://example.com  # 替换成你自己的域名
+
 on:
   push:
-    branches: [ develop ]
+    branches: [ ${{ env.DEFAULT_BRANCH }} ]
   schedule:
-    - cron: '0 0 * * 1' # 每周一自动运行一次
+    - cron: '0 0 * * 1'  # 每周一运行一次
 
 jobs:
-  build:
+  generate:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout Repository
         uses: actions/checkout@v3
 
       - name: Setup Node.js
@@ -19,14 +23,54 @@ jobs:
         with:
           node-version: '18'
 
+      - name: Create sitemap-generator.js
+        run: |
+          cat << 'EOF' > sitemap-generator.js
+          const fs = require('fs');
+          const path = require('path');
+
+          const baseUrl = process.env.SITE_URL || 'https://example.com';
+          const docsPath = path.join(__dirname, 'docs');
+
+          function getAllMarkdownFiles(dir, prefix = '') {
+            const files = fs.readdirSync(dir);
+            let results = [];
+
+            files.forEach(file => {
+              const fullPath = path.join(dir, file);
+              const relPath = path.join(prefix, file);
+              if (fs.statSync(fullPath).isDirectory()) {
+                results = results.concat(getAllMarkdownFiles(fullPath, relPath));
+              } else if (file.endsWith('.md')) {
+                results.push(relPath.replace(/\\/g, '/').replace(/\.md$/, ''));
+              }
+            });
+
+            return results;
+          }
+
+          const urls = getAllMarkdownFiles(docsPath).map(p => {
+            const url = p === 'index' ? '' : p;
+            return `<url><loc>${baseUrl}/${url}</loc></url>`;
+          });
+
+          const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+          <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+          ${urls.join('\n')}
+          </urlset>`;
+
+          fs.writeFileSync('sitemap.xml', sitemap);
+          console.log('sitemap.xml generated.');
+          EOF
+
       - name: Generate sitemap.xml
         run: node sitemap-generator.js
 
-      - name: Commit sitemap
+      - name: Commit sitemap.xml
         run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
           git add sitemap.xml
-          git commit -m "Auto-generate sitemap.xml"
+          git diff --cached --quiet || git commit -m "chore: auto-generate sitemap.xml"
           git push
         continue-on-error: true
