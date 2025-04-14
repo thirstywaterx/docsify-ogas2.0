@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 const baseUrl = 'https://your-domain.com'; // 改成你的域名
-const docsPath = path.join(process.cwd(), 'docs');
+const docsPath = path.join(process.cwd(), 'docs'); // 使用 process.cwd() 替代 __dirname
 
 function getAllMarkdownFiles(dir, prefix = '') {
   const files = fs.readdirSync(dir);
