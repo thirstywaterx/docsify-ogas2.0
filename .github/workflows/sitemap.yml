@@ -1,76 +1,37 @@
 name: Generate Sitemap
 
-env:
-  DEFAULT_BRANCH: main
-  SITE_URL: https://ogas.waterx.top  # 替换成你自己的域名
-
 on:
   push:
-    branches: [ develop ]
-  schedule:
-    - cron: '0 0 * * 1'  # 每周一运行一次
+    paths:
+      - "**.md"
+  workflow_dispatch:
 
 jobs:
   generate:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: "20"
 
-      - name: Create sitemap-generator.js
-        run: |
-          cat << 'EOF' > sitemap-generator.js
-          const fs = require('fs');
-          const path = require('path');
-
-          const baseUrl = process.env.SITE_URL || 'https://example.com';
-          const docsPath = path.join(__dirname, 'docs');
-
-          function getAllMarkdownFiles(dir, prefix = '') {
-            const files = fs.readdirSync(dir);
-            let results = [];
-
-            files.forEach(file => {
-              const fullPath = path.join(dir, file);
-              const relPath = path.join(prefix, file);
-              if (fs.statSync(fullPath).isDirectory()) {
-                results = results.concat(getAllMarkdownFiles(fullPath, relPath));
-              } else if (file.endsWith('.md')) {
-                results.push(relPath.replace(/\\/g, '/').replace(/\.md$/, ''));
-              }
-            });
-
-            return results;
-          }
-
-          const urls = getAllMarkdownFiles(docsPath).map(p => {
-            const url = p === 'index' ? '' : p;
-            return `<url><loc>${baseUrl}/${url}</loc></url>`;
-          });
-
-          const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-          <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-          ${urls.join('\n')}
-          </urlset>`;
-
-          fs.writeFileSync('sitemap.xml', sitemap);
-          console.log('sitemap.xml generated.');
-          EOF
+      - name: Install dependencies
+        run: npm install
 
       - name: Generate sitemap.xml
-        run: node sitemap-generator.js
+        env:
+          BASE_URL: https://ogas.waterx.top  # 替换为你自己的地址
+          DOCS_PATH: .
+        run: node .github/scripts/generate-sitemap.js
 
-      - name: Commit sitemap.xml
+      - name: Commit and push changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add sitemap.xml
-          git diff --cached --quiet || git commit -m "chore: auto-generate sitemap.xml"
+          git diff --cached --quiet || git commit -m "chore: auto-generate sitemap"
           git push
-        continue-on-error: true
