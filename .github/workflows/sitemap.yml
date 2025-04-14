@@ -2,32 +2,30 @@ name: Generate Sitemap
 
 on:
   push:
-    branches: [develop] # 你的主分支
-  workflow_dispatch:
+    branches:
+      - develop
 
 jobs:
-  generate-sitemap:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo
+      - name: Checkout
         uses: actions/checkout@v3
-        with:
-          persist-credentials: false
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: '18'
 
       - name: Generate sitemap.xml
         run: |
           npm install
-          node generate-sitemap.js
+          node sitemap-generator.js
 
       - name: Commit and push sitemap
-        uses: peter-evans/create-pull-request@v5
-        with:
-          commit-message: "chore: update sitemap.xml"
-          title: "Update sitemap"
-          body: "This PR updates sitemap.xml automatically."
-          branch: "auto/sitemap"
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add docs/sitemap.xml
+          git commit -m "chore: update sitemap.xml" || echo "No changes to commit"
+          git push
