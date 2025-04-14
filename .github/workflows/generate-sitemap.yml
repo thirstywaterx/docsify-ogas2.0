@@ -2,14 +2,20 @@ name: Generate Sitemap
 
 on:
   push:
-    branches: [develop]
+    branches:
+      - main
+    paths:
+      - 'docs/**/*.md'
+  schedule:
+    - cron: '0 0 * * *' # 每天运行一次作为兜底
+  workflow_dispatch:
 
 jobs:
-  build:
+  sitemap:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout repo
         uses: actions/checkout@v3
 
       - name: Setup Node.js
@@ -17,16 +23,19 @@ jobs:
         with:
           node-version: 18
 
-      - name: Install dependencies
-        run: npm install
-
       - name: Generate sitemap
-        run: node generate-sitemap.js
+        run: |
+          npm install
+          node scripts/generate-sitemap.js
 
-      - name: Commit sitemap
+      - name: Commit and push sitemap
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git add sitemap.xml
-          git commit -m "chore: update sitemap" || echo "No changes to commit"
-          git push
+          if ! git diff --quiet sitemap.xml; then
+            git add sitemap.xml
+            git commit -m "chore: auto update sitemap"
+            git push
+          else
+            echo "No changes to sitemap.xml"
+          fi
